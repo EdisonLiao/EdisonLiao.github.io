@@ -95,13 +95,19 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="行到水穷处，坐看云起时">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。 本文主要是对MVP模式进行简单的介绍，Rxjava跟Retrofit只是Api player……. demo地址 why MVP?用过MVC来开发项目的同学都应该有这样一种感觉，就是Activity 或者 Fragment既是Vi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="写了个简单的 MVP+Rxjava+Retrofit Demo">
+<meta property="og:url" content="http://yoursite.com/2017/10/14/mvp-demo/index.html">
 <meta property="og:site_name" content="行到水穷处，坐看云起时">
+<meta property="og:description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。 本文主要是对MVP模式进行简单的介绍，Rxjava跟Retrofit只是Api player……. demo地址 why MVP?用过MVC来开发项目的同学都应该有这样一种感觉，就是Activity 或者 Fragment既是Vi">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/10/14/mvp-demo/struct.jpg">
+<meta property="og:updated_time" content="2017-10-14T12:40:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="行到水穷处，坐看云起时">
+<meta name="twitter:title" content="写了个简单的 MVP+Rxjava+Retrofit Demo">
+<meta name="twitter:description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。 本文主要是对MVP模式进行简单的介绍，Rxjava跟Retrofit只是Api player……. demo地址 why MVP?用过MVC来开发项目的同学都应该有这样一种感觉，就是Activity 或者 Fragment既是Vi">
+<meta name="twitter:image" content="http://yoursite.com/2017/10/14/mvp-demo/struct.jpg">
 
 
 
@@ -131,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/10/14/mvp-demo/"/>
 
 
 
 
 
-  <title>行到水穷处，坐看云起时</title>
+  <title>写了个简单的 MVP+Rxjava+Retrofit Demo | 行到水穷处，坐看云起时</title>
   
 
 
@@ -156,8 +162,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -240,9 +245,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -272,9 +277,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/14/mvp-demo/" itemprop="url">写了个简单的 MVP+Rxjava+Retrofit Demo</a></h1>
+          <h1 class="post-title" itemprop="name headline">写了个简单的 MVP+Rxjava+Retrofit Demo</h1>
         
 
         <div class="post-meta">
@@ -324,9 +327,7 @@
       
 
       
-        
-          
-            <p>要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。</p>
+        <p>要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。</p>
 <p>本文主要是对MVP模式进行简单的介绍，Rxjava跟Retrofit只是Api player……. <a href="https://github.com/EdisonLiao/MVPDemo" target="_blank" rel="external">demo地址</a></p>
 <h3 id="why-MVP"><a href="#why-MVP" class="headerlink" title="why MVP?"></a>why MVP?</h3><p>用过MVC来开发项目的同学都应该有这样一种感觉，就是Activity 或者 Fragment既是View层又是Controller层，使得 Activity或者Frament的代码量非常大，<br>，代码耦合度也很高，显得臃肿。而MVP则把Activity和Fragment解救了出来，同时也达到了解耦合的效果，但与此同时代码量也增加不少。</p>
 <h3 id="MVP的分工"><a href="#MVP的分工" class="headerlink" title="MVP的分工"></a>MVP的分工</h3><p>Model层负责数据的组织，如SQLite操作、网络请求等，更多的是存放实体类，持有Presenter引用；<br>View层负责界面的展示，具体的业务逻辑交由Presenter层处理，持有Presenterr引用；<br>Presenter层则是关键，是Model和View之间的沟通桥梁，同时持有Model和View的对象实例，处理业务逻辑；</p>
@@ -541,8 +542,6 @@ protected void onDestroy() {
 </code></pre><p>}<br>、、、<br>在onCreate中实例化一个MainPresenter对象，从而实现了View与Presenter之间的绑定</p>
 <p>本demo主要是记录自己对于 MVP+Rxjava+Retrofit简单整合的学习。</p>
 
-          
-        
       
     </div>
     
@@ -559,134 +558,28 @@ protected void onDestroy() {
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/24/OldBlogLink/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="EdisonLiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="行到水穷处，坐看云起时">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/24/OldBlogLink/" itemprop="url">从前写的文章</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-24T22:11:36+08:00">
-                2017-09-24
-              </time>
+              <a href="/2017/09/24/OldBlogLink/" rel="next" title="从前写的文章">
+                <i class="fa fa-chevron-left"></i> 从前写的文章
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>写文章是为了记录自己的学习经历，就像读书时候手写的笔记一样。</p>
-<p>以后，将会在这里继续记录我学习的点点滴滴</p>
-<p><a href="http://blog.csdn.net/edisonliao666" target="_blank" rel="external">以前的文章</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -696,132 +589,11 @@ protected void onDestroy() {
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/16/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="EdisonLiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="行到水穷处，坐看云起时">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/16/hello-world/" itemprop="url">一首诗</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-16T22:02:36+08:00">
-                2017-09-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="终南别业"><a href="#终南别业" class="headerlink" title="终南别业"></a>终南别业</h3><blockquote>
-<p>中岁颇好道，晚家南山陲。<br>兴来每独往，胜事空自知。<br>行到水穷处，坐看云起时。<br>偶然值林叟，谈笑无还期。</p>
-</blockquote>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -829,6 +601,10 @@ protected void onDestroy() {
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -849,8 +625,17 @@ protected void onDestroy() {
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <p class="site-author-name" itemprop="name">EdisonLiao</p>
@@ -893,6 +678,22 @@ protected void onDestroy() {
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#why-MVP"><span class="nav-number">1.</span> <span class="nav-text">why MVP?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVP的分工"><span class="nav-number">2.</span> <span class="nav-text">MVP的分工</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model层"><span class="nav-number">3.</span> <span class="nav-text">Model层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View层"><span class="nav-number">4.</span> <span class="nav-text">View层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络请求"><span class="nav-number">5.</span> <span class="nav-text">网络请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Presenter层"><span class="nav-number">6.</span> <span class="nav-text">Presenter层</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
