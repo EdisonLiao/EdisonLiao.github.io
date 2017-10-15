@@ -95,18 +95,18 @@
 
 
 
-<meta name="description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。 本文主要是对MVP模式进行简单的介绍，Rxjava跟Retrofit只是Api player……. demo地址 why MVP?用过MVC来开发项目的同学都应该有这样一种感觉，就是Activity 或者 Fragment既是Vi">
+<meta name="description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="写了个简单的 MVP+Rxjava+Retrofit Demo">
 <meta property="og:url" content="http://yoursite.com/2017/10/14/mvp-demo/index.html">
 <meta property="og:site_name" content="行到水穷处，坐看云起时">
-<meta property="og:description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。 本文主要是对MVP模式进行简单的介绍，Rxjava跟Retrofit只是Api player……. demo地址 why MVP?用过MVC来开发项目的同学都应该有这样一种感觉，就是Activity 或者 Fragment既是Vi">
+<meta property="og:description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2017/10/14/mvp-demo/struct.jpg">
-<meta property="og:updated_time" content="2017-10-14T15:05:18.000Z">
+<meta property="og:updated_time" content="2017-10-15T07:54:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="写了个简单的 MVP+Rxjava+Retrofit Demo">
-<meta name="twitter:description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。 本文主要是对MVP模式进行简单的介绍，Rxjava跟Retrofit只是Api player……. demo地址 why MVP?用过MVC来开发项目的同学都应该有这样一种感觉，就是Activity 或者 Fragment既是Vi">
+<meta name="twitter:description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。">
 <meta name="twitter:image" content="http://yoursite.com/2017/10/14/mvp-demo/struct.jpg">
 
 
@@ -328,6 +328,7 @@
 
       
         <p>要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。</p>
+<a id="more"></a>
 <p>本文主要是对MVP模式进行简单的介绍，Rxjava跟Retrofit只是Api player……. <a href="https://github.com/EdisonLiao/MVPDemo" target="_blank" rel="external">demo地址</a></p>
 <h3 id="why-MVP"><a href="#why-MVP" class="headerlink" title="why MVP?"></a>why MVP?</h3><p>用过MVC来开发项目的同学都应该有这样一种感觉，就是Activity 或者 Fragment既是View层又是Controller层，使得 Activity或者Frament的代码量非常大，<br>，代码耦合度也很高，显得臃肿。而MVP则把Activity和Fragment解救了出来，同时也达到了解耦合的效果，但与此同时代码量也增加不少。</p>
 <h3 id="MVP的分工"><a href="#MVP的分工" class="headerlink" title="MVP的分工"></a>MVP的分工</h3><p>Model层负责数据的组织，如SQLite操作、网络请求等，更多的是存放实体类，持有Presenter引用；<br>View层负责界面的展示，具体的业务逻辑交由Presenter层处理，持有Presenterr引用；<br>Presenter层则是关键，是Model和View之间的沟通桥梁，同时持有Model和View的对象实例，处理业务逻辑；</p>
