@@ -95,17 +95,17 @@
 
 
 
-<meta name="description" content="最近老在想什么是程序猿的软实力，思来想去，发觉是解决问题的能力、学习能力、英语阅读能力、算法……要仔细罗列的话，大概还有很多很多。就在这思绪的停顿片刻，余光瞥见书桌上摆放的《算法 第四版》，书是年初买的，每次看都是草草翻阅，实在是惭愧，于是乎奔着提升软实力的目标（借口），决定按章看完，然后上LeetCode按Tags去刷题，啊…真的是，人一旦有了小目标，心里踏实很多（三分钟热血？？）  什么是KM">
+<meta name="description" content="最近老在想什么是程序猿的软实力，思来想去，发觉是解决问题的能力、学习能力、英语阅读能力、算法……要仔细罗列的话，大概还有很多很多。就在这思绪的停顿片刻，余光瞥见书桌上摆放的《算法 第四版》，书是年初买的，每次看都是草草翻阅，实在是惭愧，于是乎奔着提升软实力的目标（借口），决定按章看完，然后上LeetCode按Tags去刷题，啊…真的是，人一旦有了小目标，心里踏实很多（三分钟热血？？）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="KMP算法">
 <meta property="og:url" content="http://yoursite.com/2017/10/31/KMP/index.html">
 <meta property="og:site_name" content="行到水穷处，坐看云起时">
-<meta property="og:description" content="最近老在想什么是程序猿的软实力，思来想去，发觉是解决问题的能力、学习能力、英语阅读能力、算法……要仔细罗列的话，大概还有很多很多。就在这思绪的停顿片刻，余光瞥见书桌上摆放的《算法 第四版》，书是年初买的，每次看都是草草翻阅，实在是惭愧，于是乎奔着提升软实力的目标（借口），决定按章看完，然后上LeetCode按Tags去刷题，啊…真的是，人一旦有了小目标，心里踏实很多（三分钟热血？？）  什么是KM">
+<meta property="og:description" content="最近老在想什么是程序猿的软实力，思来想去，发觉是解决问题的能力、学习能力、英语阅读能力、算法……要仔细罗列的话，大概还有很多很多。就在这思绪的停顿片刻，余光瞥见书桌上摆放的《算法 第四版》，书是年初买的，每次看都是草草翻阅，实在是惭愧，于是乎奔着提升软实力的目标（借口），决定按章看完，然后上LeetCode按Tags去刷题，啊…真的是，人一旦有了小目标，心里踏实很多（三分钟热血？？）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-04T04:51:19.000Z">
+<meta property="og:updated_time" content="2017-11-04T04:54:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="KMP算法">
-<meta name="twitter:description" content="最近老在想什么是程序猿的软实力，思来想去，发觉是解决问题的能力、学习能力、英语阅读能力、算法……要仔细罗列的话，大概还有很多很多。就在这思绪的停顿片刻，余光瞥见书桌上摆放的《算法 第四版》，书是年初买的，每次看都是草草翻阅，实在是惭愧，于是乎奔着提升软实力的目标（借口），决定按章看完，然后上LeetCode按Tags去刷题，啊…真的是，人一旦有了小目标，心里踏实很多（三分钟热血？？）  什么是KM">
+<meta name="twitter:description" content="最近老在想什么是程序猿的软实力，思来想去，发觉是解决问题的能力、学习能力、英语阅读能力、算法……要仔细罗列的话，大概还有很多很多。就在这思绪的停顿片刻，余光瞥见书桌上摆放的《算法 第四版》，书是年初买的，每次看都是草草翻阅，实在是惭愧，于是乎奔着提升软实力的目标（借口），决定按章看完，然后上LeetCode按Tags去刷题，啊…真的是，人一旦有了小目标，心里踏实很多（三分钟热血？？）">
 
 
 
@@ -326,7 +326,7 @@
 
       
         <p>最近老在想什么是程序猿的软实力，思来想去，发觉是解决问题的能力、学习能力、英语阅读能力、算法……要仔细罗列的话，大概还有很多很多。<br>就在这思绪的停顿片刻，余光瞥见书桌上摆放的《算法 第四版》，书是年初买的，每次看都是草草翻阅，实在是惭愧，于是乎奔着提升软实力的目标（借口），决定按章看完，然后上LeetCode按Tags去刷题，啊…真的是，人一旦有了小目标，心里踏实很多（三分钟热血？？）</p>
-<!--阅读全文-->
+<a id="more"></a>
 <h3 id="什么是KMP"><a href="#什么是KMP" class="headerlink" title="什么是KMP"></a>什么是KMP</h3><p>KMP算法是一种子字符串查找的算法，比起暴力查找，最大的优化是指向主串的指针不用回头，是递增的。而这一优化要归功于，子串（pattern）的完美前缀后缀算法，也就是网上大家所说的 next数组。next数组的存在，<br>解决了当子串字符与主串字符不匹配时，子串指针应该回退的位置。</p>
 <h3 id="干货"><a href="#干货" class="headerlink" title="干货"></a>干货</h3><p>虽说书读百遍其义自见，但是我觉得算法这东西单纯看书的话，很容易看着看着就放弃了，因为毕竟是翻译过来的，当然不是说这本书翻译得不好，只是翻译多多少少都会有偏差（或者是我蠢）。于是乎我在B站上找到了一位阿三（印度朋友）对于KMP的视频讲解，讲得很细很容易懂，<a href="https://www.bilibili.com/video/av3246487/?from=search&amp;seid=1769270493014630067" target="_blank" rel="external">阿三的视频</a></p>
 <h3 id="show-me-the-code"><a href="#show-me-the-code" class="headerlink" title="show me the code"></a>show me the code</h3><p>先实现next数组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public int[] next(char[] pattern)&#123;</div><div class="line">    int l = pattern.length;</div><div class="line">    int i = 0;</div><div class="line">    int j = 1;</div><div class="line">    int[] next = new int[l];</div><div class="line">    for(;j &lt; l;)&#123;</div><div class="line">        if(pattern[i] == pattern[j])&#123;</div><div class="line">            next[j] = i + 1;</div><div class="line">            j++;</div><div class="line">            i++;</div><div class="line"></div><div class="line">        &#125;else&#123;</div><div class="line">            </div><div class="line">            if(i == 0)&#123;</div><div class="line">                next[j] = 0;</div><div class="line">                j++;</div><div class="line"></div><div class="line">            &#125;else&#123;</div><div class="line">                i = next[i - 1];</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    return next;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
