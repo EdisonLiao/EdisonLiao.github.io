@@ -102,15 +102,15 @@
 <meta property="og:site_name" content="行到水穷处，坐看云起时">
 <meta property="og:description" content="在排序算法中，插入排序和快速排序是有在实际Api中用到的，比如sort方法，其内部集成了插入排序和快速排序，当需要排序的数组较短时，采用插入排序，数组较长时采用快速排序。而希尔排序是插入排序的优化版，那么接下来就看看三种排序都是如何实现的啦">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2017/12/11/insert/ioriginal.ipg">
+<meta property="og:image" content="http://yoursite.com/2017/12/11/insert/ioriginal.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/12/11/insert/shellInsert.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/12/11/insert/after4.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/12/11/insert/quickSort.jpg">
-<meta property="og:updated_time" content="2017-12-11T16:06:29.000Z">
+<meta property="og:updated_time" content="2017-12-11T16:09:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="插入排序 &amp; 希尔排序 &amp; 快速排序">
 <meta name="twitter:description" content="在排序算法中，插入排序和快速排序是有在实际Api中用到的，比如sort方法，其内部集成了插入排序和快速排序，当需要排序的数组较短时，采用插入排序，数组较长时采用快速排序。而希尔排序是插入排序的优化版，那么接下来就看看三种排序都是如何实现的啦">
-<meta name="twitter:image" content="http://yoursite.com/2017/12/11/insert/ioriginal.ipg">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/11/insert/ioriginal.jpg">
 
 
 
@@ -333,7 +333,7 @@
         <p>在排序算法中，插入排序和快速排序是有在实际Api中用到的，比如sort方法，其内部集成了插入排序和快速排序，当需要排序的数组较短时，采用插入排序，数组较长时采用快速排序。<br>而希尔排序是插入排序的优化版，那么接下来就看看三种排序都是如何实现的啦</p>
 <a id="more"></a>
 <p>###插入排序<br>插入排序默认数组中的第一个元素是有序的，就像我们打牌的时候，手里拿着第一张牌，然后再发一张牌，新发的牌就跟第一张比大小，然后去移动牌的位置，后面的牌如此类推，<br>每拿到一张新的牌，都跟前面排好序的牌去对比，若发现新的牌比排好序的牌中的某张牌小（若是按照从小到大的排序）则插入到某张牌的前面。</p>
-<p>如下图所示：<br><img src="/2017/12/11/insert/ioriginal.ipg" alt="待排序数组"></p>
+<p>如下图所示：<br><img src="/2017/12/11/insert/ioriginal.jpg" alt="待排序数组"></p>
 <p>数组中第一个元素是3 ，这个时候再派一张6的牌，6比3大所以不用移动位置。再派一张4的牌，4比6小，互换彼此位置，这个时候，数组前三位变成了3,4,6，因为4比3大，所以不用交换<br>两者的位置。继续派牌，新派的牌是2,2比6小，互换彼此后数组前四位变成了3,4,2,6，2继续向前比较，2比4小，互换彼此后数组前四位变成了3,2,4,6，2继续向前比较，2比3小，<br>互换彼此后，数组前四位变成了，2,3,4,6，此时，2继续向前比较时，由于已经到了数组的0位置，如果再比较就是数组的0位置跟数组的-1位置比，这样就数组越界了，所以停止向前比较，<br>继续派牌，重复刚才的操作，知道遍历完数组。</p>
 <p>代码实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public void insertSort(int[] nums)&#123;</div><div class="line">    </div><div class="line">    for(int i = 1; i &lt; nums.length;i++)&#123;</div><div class="line">        int tmp = nums[i]; </div><div class="line">        int  j = i - 1;</div><div class="line"></div><div class="line">        while(j &gt;=0 &amp;&amp; nums[j] &gt; tmp)&#123; //每次新派的牌都要跟已经排好序的牌去做比较</div><div class="line">            nums[j + 1] = nums[j]; //这里的j+1，是因为一开始 j = i -1，所以j+1才是i的位置，这样就把比tmp大的数跟tmp互换了 </div><div class="line">            j--;</div><div class="line">        &#125;</div><div class="line">        nums[j + 1] = tmp;  //最后把tmp插入到停止比较的位置上</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>###希尔排序<br>希尔排序是插入排序的优化，插入排序在每次收到新的派牌的时候，都要去把前面已经排好序的数组遍历一遍，这样效率比较低。希尔排序的做法是，每次取等间隔的数组元素进行排序，<br>间隔在每次排序之后减一直到间隔为一，排序结束，数组就变得有序了，大致的流程如下图所示：<br><img src="/2017/12/11/insert/shellInsert.jpg" alt="间隔为4的排序"></p>
