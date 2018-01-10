@@ -95,17 +95,17 @@
 
 
 
-<meta name="description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。 关于Java注解注解(Annotation)在JDK1.5之后增加的一个新特性，注解的引入意义很大，有很多非常有名的框架，比如后台的Hibernate、Spring，Android端的ButterKnife、Dragger等">
+<meta name="description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java注解与ButterKnife的实现">
 <meta property="og:url" content="http://yoursite.com/2018/01/10/annonation/index.html">
 <meta property="og:site_name" content="行到水穷处，坐看云起时">
-<meta property="og:description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。 关于Java注解注解(Annotation)在JDK1.5之后增加的一个新特性，注解的引入意义很大，有很多非常有名的框架，比如后台的Hibernate、Spring，Android端的ButterKnife、Dragger等">
+<meta property="og:description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-10T16:09:38.000Z">
+<meta property="og:updated_time" content="2018-01-10T16:13:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java注解与ButterKnife的实现">
-<meta name="twitter:description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。 关于Java注解注解(Annotation)在JDK1.5之后增加的一个新特性，注解的引入意义很大，有很多非常有名的框架，比如后台的Hibernate、Spring，Android端的ButterKnife、Dragger等">
+<meta name="twitter:description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。">
 
 
 
@@ -326,6 +326,7 @@
 
       
         <p>前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。</p>
+<a id="more"></a>
 <h3 id="关于Java注解"><a href="#关于Java注解" class="headerlink" title="关于Java注解"></a>关于Java注解</h3><p>注解(Annotation)在JDK1.5之后增加的一个新特性，注解的引入意义很大，有很多非常有名的框架，比如后台的Hibernate、Spring，Android端的ButterKnife、Dragger等，<br>注解的使用提高了代码的可读性，使得一些配置更加灵活，更好的实现了解耦合。用代码去生成代码，可以减去不必要的重复的代码输出，同时提高重复代码输出的可靠性。</p>
 <p>Java目前只内置了三种标准注解，分别是：</p>
 <ul>
