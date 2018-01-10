@@ -95,13 +95,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="行到水穷处，坐看云起时">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。 关于Java注解注解(Annotation)在JDK1.5之后增加的一个新特性，注解的引入意义很大，有很多非常有名的框架，比如后台的Hibernate、Spring，Android端的ButterKnife、Dragger等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java注解与ButterKnife的实现">
+<meta property="og:url" content="http://yoursite.com/2018/01/10/annonation/index.html">
 <meta property="og:site_name" content="行到水穷处，坐看云起时">
+<meta property="og:description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。 关于Java注解注解(Annotation)在JDK1.5之后增加的一个新特性，注解的引入意义很大，有很多非常有名的框架，比如后台的Hibernate、Spring，Android端的ButterKnife、Dragger等">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-10T16:09:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="行到水穷处，坐看云起时">
+<meta name="twitter:title" content="Java注解与ButterKnife的实现">
+<meta name="twitter:description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。 关于Java注解注解(Annotation)在JDK1.5之后增加的一个新特性，注解的引入意义很大，有很多非常有名的框架，比如后台的Hibernate、Spring，Android端的ButterKnife、Dragger等">
 
 
 
@@ -131,13 +135,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/10/annonation/"/>
 
 
 
 
 
-  <title>行到水穷处，坐看云起时</title>
+  <title>Java注解与ButterKnife的实现 | 行到水穷处，坐看云起时</title>
   
 
 
@@ -156,8 +160,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -240,9 +243,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -272,9 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/10/annonation/" itemprop="url">Java注解与ButterKnife的实现</a></h1>
+          <h1 class="post-title" itemprop="name headline">Java注解与ButterKnife的实现</h1>
         
 
         <div class="post-meta">
@@ -324,9 +325,7 @@
       
 
       
-        
-          
-            <p>前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。</p>
+        <p>前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。</p>
 <h3 id="关于Java注解"><a href="#关于Java注解" class="headerlink" title="关于Java注解"></a>关于Java注解</h3><p>注解(Annotation)在JDK1.5之后增加的一个新特性，注解的引入意义很大，有很多非常有名的框架，比如后台的Hibernate、Spring，Android端的ButterKnife、Dragger等，<br>注解的使用提高了代码的可读性，使得一些配置更加灵活，更好的实现了解耦合。用代码去生成代码，可以减去不必要的重复的代码输出，同时提高重复代码输出的可靠性。</p>
 <p>Java目前只内置了三种标准注解，分别是：</p>
 <ul>
@@ -360,8 +359,6 @@
 <p>没错，方法中的所有代码都是通过CodeBlock一句句抠出来的……</p>
 <p>到这里，ButterKnife就分析完了，这里还要介绍一下JavaPoet，因为ButterKnife中也是用到了它去生成XX_ViewBinding.java<br>JavaPoet是一组用来生成 .java文件的JAVA API。正如其名，当你创建.java文件时，你将不用再处理代码换行、缩进、引用导入等枯燥而又容易出错的工作，<br>这一切JavaPoet都将能够很好地为你完成，你的工作将变得富有诗意。<br>TypeSpec、ParameterSpec、MethodSpec、CodeBlock、JavaFile都是JavaPoet提供的用于描述一个源文件元素的类</p>
 
-          
-        
       
     </div>
     
@@ -378,384 +375,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/11/insert/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="EdisonLiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="行到水穷处，坐看云起时">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/11/insert/" itemprop="url">插入排序 & 希尔排序 & 快速排序</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-11T23:57:03+08:00">
-                2017-12-11
-              </time>
+              <a href="/2017/12/11/insert/" rel="next" title="插入排序 & 希尔排序 & 快速排序">
+                <i class="fa fa-chevron-left"></i> 插入排序 & 希尔排序 & 快速排序
+              </a>
             
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在排序算法中，插入排序和快速排序是有在实际Api中用到的，比如sort方法，其内部集成了插入排序和快速排序，当需要排序的数组较短时，采用插入排序，数组较长时采用快速排序。<br>而希尔排序是插入排序的优化版，那么接下来就看看三种排序都是如何实现的啦</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/12/11/insert/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/31/KMP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="EdisonLiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="行到水穷处，坐看云起时">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/31/KMP/" itemprop="url">KMP算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-31T22:51:48+08:00">
-                2017-10-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>最近老在想什么是程序猿的软实力，思来想去，发觉是解决问题的能力、学习能力、英语阅读能力、算法……要仔细罗列的话，大概还有很多很多。<br>就在这思绪的停顿片刻，余光瞥见书桌上摆放的《算法 第四版》，书是年初买的，每次看都是草草翻阅，实在是惭愧，于是乎奔着提升软实力的目标（借口），决定按章看完，然后上LeetCode按Tags去刷题，啊…真的是，人一旦有了小目标，心里踏实很多（三分钟热血？？）</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/10/31/KMP/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/14/mvp-demo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="EdisonLiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="行到水穷处，坐看云起时">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/14/mvp-demo/" itemprop="url">写了个简单的 MVP+Rxjava+Retrofit Demo</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-14T20:40:04+08:00">
-                2017-10-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/10/14/mvp-demo/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -765,254 +406,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/24/OldBlogLink/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="EdisonLiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="行到水穷处，坐看云起时">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/24/OldBlogLink/" itemprop="url">从前写的文章</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-24T22:11:36+08:00">
-                2017-09-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>写文章是为了记录自己的学习经历，就像读书时候手写的笔记一样。</p>
-<p>以后，将会在这里继续记录我学习的点点滴滴</p>
-<p><a href="http://blog.csdn.net/edisonliao666" target="_blank" rel="external">以前的文章</a></p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/16/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="EdisonLiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="行到水穷处，坐看云起时">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/16/hello-world/" itemprop="url">一首诗</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-16T22:02:36+08:00">
-                2017-09-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="终南别业"><a href="#终南别业" class="headerlink" title="终南别业"></a>终南别业</h3><blockquote>
-<p>中岁颇好道，晚家南山陲。<br>兴来每独往，胜事空自知。<br>行到水穷处，坐看云起时。<br>偶然值林叟，谈笑无还期。</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -1020,6 +418,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -1040,8 +442,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <p class="site-author-name" itemprop="name">EdisonLiao</p>
@@ -1084,6 +495,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Java注解"><span class="nav-number">1.</span> <span class="nav-text">关于Java注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#举个栗子"><span class="nav-number">2.</span> <span class="nav-text">举个栗子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ButterKnife的实现"><span class="nav-number">3.</span> <span class="nav-text">ButterKnife的实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
