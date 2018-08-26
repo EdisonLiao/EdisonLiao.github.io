@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java注解与ButterKnife的实现">
+<meta property="og:url" content="http://yoursite.com/2018/01/11/annonation/index.html">
+<meta property="og:site_name" content="行到水穷处，坐看云起时">
+<meta property="og:description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-26T07:47:04.926Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java注解与ButterKnife的实现">
+<meta name="twitter:description" content="前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/11/annonation/"/>
+
+
+
+
+
+  <title>Java注解与ButterKnife的实现 | 行到水穷处，坐看云起时</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">行到水穷处，坐看云起时</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/11/annonation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="EdisonLiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="行到水穷处，坐看云起时">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java注解与ButterKnife的实现</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-11T00:13:13+08:00">
+                2018-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前些天的时候，看了一些关于注解的文章，发现注解是个溜得飞起的东西，特别是借用注解动态生成代码，真的是让我眼前一亮，所以后面借着这股劲把ButterKnife的源码也看了一下。</p>
+<a id="more"></a>
+<h3 id="关于Java注解"><a href="#关于Java注解" class="headerlink" title="关于Java注解"></a>关于Java注解</h3><p>注解(Annotation)在JDK1.5之后增加的一个新特性，注解的引入意义很大，有很多非常有名的框架，比如后台的Hibernate、Spring，Android端的ButterKnife、Dragger等，<br>注解的使用提高了代码的可读性，使得一些配置更加灵活，更好的实现了解耦合。用代码去生成代码，可以减去不必要的重复的代码输出，同时提高重复代码输出的可靠性。</p>
+<p>Java目前只内置了三种标准注解，分别是：</p>
+<ul>
+<li>@Override: 表示当前的方法定义将覆盖超类中的方法；</li>
+<li>@Deprecated: 表示被注解的方法已经过时，推荐使用新的方法代替，但可以继续使用该方法，只是编译器会提示警告；</li>
+<li>@Suppress Warnings: 可以关闭编译器提示的警告</li>
+</ul>
+<p>若想自定义注解，则要用到四种元注解，元注解的作用就是生成注解，下面分别介绍四种元注解：</p>
+<ul>
+<li><p>@Target:<br>表示该注解可以用在什么地方，可能的ElementType参数包括：<br>CONSTRUCTOR: 构造器的声明 （用于构造函数）<br>FILED: 域声明 （用于成员变量、对象、属性）<br>LOCAL_VARIABLE: 局部变量声明 （用于用于描述局部变量）<br>METHOD: 方法声明 （用于方法）<br>PACKAGE: 包声明 （用于描述包）<br>PARAMERER: 参数声明 （用于描述参数）<br>TYPE: 类、接口 （用于描述类、接口）</p>
+</li>
+<li><p>@Retention<br>表示需要在什么级别保存该注解信息，可选的RetenPolicy参数包括：<br>SOURCE: 注解将被编译器丢弃<br>CLASS: 注解在class文件中可用，但会被VM丢弃<br>RUNTIME: VM将在运行期也保留注解，因此可以通过反射机制读取注解的信息 </p>
+</li>
+<li><p>@Documented<br>将注解包含在Javadoc中</p>
+</li>
+<li><p>@Inherited<br>允许子类继承父类中的注解</p>
+</li>
+</ul>
+<h3 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@Target(ElementType.METHOD)  //此注解只能用在类中的方法上</div><div class="line">@Retention(RetrntionPolicy.RUNTIME) //此注解在运行期间仍有效</div><div class="line">public @interface UserCase&#123;</div><div class="line"></div><div class="line">   /*</div><div class="line">   *此注解可以配置两个参数，一个是int类型的id,一个是默认值为&quot;nothing&quot;的字符串</div><div class="line">   */</div><div class="line">	public int id();</div><div class="line">	public String description() default &quot;nothing&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>声明完后，接下来就是如何去使用这个注解：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public class PasswordUtils&#123;</div><div class="line">    @UseCase(id = 47,description = &quot;Password must contain at least one numeric&quot;)</div><div class="line">    public boolean validatePassword(String password)&#123;</div><div class="line">        return (password.matches(&quot;\\w*\\d\\W*&quot;));</div><div class="line">    &#125; </div><div class="line"></div><div class="line">    @UseCase(id = 48)</div><div class="line">    public String encryptPassword(String password)&#123;</div><div class="line">        return new StringBuilder(password.reverse()).toString();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @UseCase(id = 49,description = &quot;New password can&apos;t equal previously used ones&quot;)</div><div class="line">    public boolean checkForNewPassword(List&lt;String&gt; prevPasswords,String password)&#123;</div><div class="line">       return !prevPasswords.contains(password);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>那么问题来了，怎么去处理这些注解呢？如何从注解中得到需要的信息？Java为我们提供了apt(Java Poet)去处理注解，apt留到分析ButterKnife再介绍，下面先用反射处理一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">public class UseCaseTracker&#123;</div><div class="line">    public static void trackerUseCase(List&lt;Integer&gt; useCases,Class&lt;?&gt; cl)&#123;</div><div class="line">        for(Method m: cl.getDeclaredMethod())&#123;</div><div class="line">            UseCase uc = m.getAnnotation(UseCase.class);</div><div class="line">            if(uc != null)&#123;</div><div class="line">                System.out.println(&quot;Found use case:&quot; + uc.id() + uc.description());</div><div class="line">                useCases.remove(new Integer(uc.id()));   </div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        for(int i : useCases)&#123;</div><div class="line">            System.out.println(&quot;Warning : Missing use case-&quot; + i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//测试</div><div class="line">public static void main(String[] args)&#123;</div><div class="line">    List&lt;Integer&gt; useCases = new ArrayList&lt;&gt;();</div><div class="line">    Collections.addAll(useCases,47,48,49,50);</div><div class="line">    trackUseCases(useCases,PasswordUtils.class);</div><div class="line">&#125;</div><div class="line"></div><div class="line">//output</div><div class="line">Found Use Case: 47 Password must contain at least one numeric</div><div class="line">Found Use Case: 48 no description</div><div class="line">Found Use Case: 49 New password can&apos;t equal previously used ones</div><div class="line">Warning: Missing use case-50</div></pre></td></tr></table></figure></p>
+<h3 id="ButterKnife的实现"><a href="#ButterKnife的实现" class="headerlink" title="ButterKnife的实现"></a>ButterKnife的实现</h3><p>ButterKnife是基于Java的apt(annotation processing tool)实现的，下面先说说什么是apt：<br>简单来说apt是Java提供的用于处理注解的工具，使用apt生成注解处理器时，我们无法利用Java的反射机制，因为我们操作的是源码，也就是说apt是在编译时期处理了注解。<br>apt使用起来还是比较方便的，继承AbstractProcessor类，实现其中的process方法，在process方法中去处理我们自定义的注解，下面看看ButterKnife里的实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">@AutoService(Processor.class)</div><div class="line">public final class ButterKnifeProcessor extends AbstractProcessor &#123;</div><div class="line">    ......</div><div class="line">    @Override </div><div class="line">    public boolean process(Set&lt;? extends TypeElement&gt; elements, RoundEnvironment env) &#123;</div><div class="line">    Map&lt;TypeElement, BindingSet&gt; bindingMap = findAndParseTargets(env);</div><div class="line"></div><div class="line">    for (Map.Entry&lt;TypeElement, BindingSet&gt; entry : bindingMap.entrySet()) &#123;</div><div class="line">      TypeElement typeElement = entry.getKey();</div><div class="line">      BindingSet binding = entry.getValue();</div><div class="line"></div><div class="line">      JavaFile javaFile = binding.brewJava(sdk, debuggable);</div><div class="line">      try &#123;</div><div class="line">        javaFile.writeTo(filer);</div><div class="line">      &#125; catch (IOException e) &#123;</div><div class="line">        error(typeElement, &quot;Unable to write binding for type %s: %s&quot;, typeElement, e.getMessage());</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return false;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通过findAndParseTargets方法找到所有使用了ButterKnife所支持的注解的类，看了源码才知道原来ButterKnife自定义的注解原来有那么多，这里就只介绍@BindView了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">//ButterKnife所有的自定义注解</div><div class="line">private Set&lt;Class&lt;? extends Annotation&gt;&gt; getSupportedAnnotations() &#123;</div><div class="line">    Set&lt;Class&lt;? extends Annotation&gt;&gt; annotations = new LinkedHashSet&lt;&gt;();</div><div class="line"></div><div class="line">    annotations.add(BindAnim.class);</div><div class="line">    annotations.add(BindArray.class);</div><div class="line">    annotations.add(BindBitmap.class);</div><div class="line">    annotations.add(BindBool.class);</div><div class="line">    annotations.add(BindColor.class);</div><div class="line">    annotations.add(BindDimen.class);</div><div class="line">    annotations.add(BindDrawable.class);</div><div class="line">    annotations.add(BindFloat.class);</div><div class="line">    annotations.add(BindFont.class);</div><div class="line">    annotations.add(BindInt.class);</div><div class="line">    annotations.add(BindString.class);</div><div class="line">    annotations.add(BindView.class);</div><div class="line">    annotations.add(BindViews.class);</div><div class="line">    annotations.addAll(LISTENERS);</div><div class="line"></div><div class="line">    return annotations;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">private Map&lt;TypeElement, BindingSet&gt; findAndParseTargets(RoundEnvironment env) &#123;</div><div class="line">    Map&lt;TypeElement, BindingSet.Builder&gt; builderMap = new LinkedHashMap&lt;&gt;();</div><div class="line">    Set&lt;TypeElement&gt; erasedTargetNames = new LinkedHashSet&lt;&gt;();</div><div class="line"></div><div class="line">    scanForRClasses(env);</div><div class="line"></div><div class="line">    ......</div><div class="line"></div><div class="line">    // Process each @BindView element.</div><div class="line">    for (Element element : env.getElementsAnnotatedWith(BindView.class)) &#123;</div><div class="line">      // we don&apos;t SuperficialValidation.validateElement(element)</div><div class="line">      // so that an unresolved View type can be generated by later processing rounds</div><div class="line">      try &#123;</div><div class="line">        parseBindView(element, builderMap, erasedTargetNames);</div><div class="line">      &#125; catch (Exception e) &#123;</div><div class="line">        logParsingError(element, BindView.class, e);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在parseBindView里面去处理被@BindView所注解的view的id，在后面的自动生成findViewById代码中会用到，这里就不对这个方法展开了。<br>我们回过头来看看process方法，可以下面的两行代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">JavaFile javaFile = binding.brewJava(sdk, debuggable);</div><div class="line">javaFile.writeTo(filer);</div></pre></td></tr></table></figure></p>
+<p>好了，终于要进入高潮了，就是这两行代码，实现了自动生成findViewById的代码，为我们自动绑定了view，事不宜迟，赶紧上代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">JavaFile brewJava(int sdk, boolean debuggable) &#123;</div><div class="line">    return JavaFile.builder(bindingClassName.packageName(), createType(sdk, debuggable))</div><div class="line">        .addFileComment(&quot;Generated code from Butter Knife. Do not modify!&quot;)</div><div class="line">        .build();</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>“Generated code from Butter Knife. Do not modify!”这句话是不是好像在哪见过？没错，就是在AS项目中的build目录下，可以找到一大堆ButterKnife自动生成的<br>XX_ViewBinding.java文件的第一句话，这再次说明brewJava方法就是自动生成绑定控件代码的精髓所在。<br>JavaFile.builder()中有两个参数，一个是packageName即为使用了@BindView类的所在包名，一个是TypeSpec，packageName好理解，下面关注TypeSpec。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">private TypeSpec createType(int sdk, boolean debuggable) &#123;</div><div class="line">    TypeSpec.Builder result = TypeSpec.classBuilder(bindingClassName.simpleName())</div><div class="line">        .addModifiers(PUBLIC);</div><div class="line">    if (isFinal) &#123;</div><div class="line">      result.addModifiers(FINAL);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (parentBinding != null) &#123;</div><div class="line">      result.superclass(parentBinding.bindingClassName);</div><div class="line">    &#125; else &#123;</div><div class="line">      result.addSuperinterface(UNBINDER);  //为XX_ViewBinding添加需要实现的接口</div><div class="line">    &#125;                                    //private static final ClassName UNBINDER = ClassName.get(&quot;butterknife&quot;, &quot;Unbinder&quot;);</div><div class="line"></div><div class="line">    if (hasTargetField()) &#123;</div><div class="line">      result.addField(targetTypeName, &quot;target&quot;, PRIVATE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (isView) &#123;</div><div class="line">      result.addMethod(createBindingConstructorForView()); //为XX_ViewBinding添加方法</div><div class="line">    &#125; else if (isActivity) &#123;</div><div class="line">      result.addMethod(createBindingConstructorForActivity());</div><div class="line">    &#125; else if (isDialog) &#123;</div><div class="line">      result.addMethod(createBindingConstructorForDialog());</div><div class="line">    &#125;</div><div class="line">    if (!constructorNeedsView()) &#123;</div><div class="line">      // Add a delegating constructor with a target type + view signature for reflective use.</div><div class="line">      result.addMethod(createBindingViewDelegateConstructor());</div><div class="line">    &#125;</div><div class="line">    result.addMethod(createBindingConstructor(sdk, debuggable));  //为XX_ViewBinding添加构造函数</div><div class="line"></div><div class="line">    if (hasViewBindings() || parentBinding == null) &#123;</div><div class="line">      result.addMethod(createBindingUnbindMethod(result));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return result.build();</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>TypeSpec就是代表一个类，在这里就是代表XX_ViewBinding这个类，createType方法构建了一个XX_ViewBinding类的所有方法及属性，下面是一个XX_ViewBinding的示例代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public class AccountActivity_ViewBinding implements Unbinder &#123;</div><div class="line">  private AccountActivity target;</div><div class="line"></div><div class="line">  @UiThread</div><div class="line">  public AccountActivity_ViewBinding(AccountActivity target) &#123;</div><div class="line">    this(target, target.getWindow().getDecorView());</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  @UiThread</div><div class="line">  public AccountActivity_ViewBinding(AccountActivity target, View source) &#123;</div><div class="line">    this.target = target;</div><div class="line"></div><div class="line">    target.oilCardRl = Utils.findRequiredViewAsType(source, R.id.oil_card_rl, &quot;field &apos;oilCardRl&apos;&quot;, RelativeLayout.class);</div><div class="line">    target.feeChargeRl = Utils.findRequiredViewAsType(source, R.id.fee_charge_rl, &quot;field &apos;feeChargeRl&apos;&quot;, RelativeLayout.class);</div><div class="line">    target.mPiccText = Utils.findRequiredViewAsType(source, R.id.picc_text, &quot;field &apos;mPiccText&apos;&quot;, TextView.class);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  @Override</div><div class="line">  @CallSuper</div><div class="line">  public void unbind() &#123;</div><div class="line">    AccountActivity target = this.target;</div><div class="line">    if (target == null) throw new IllegalStateException(&quot;Bindings already cleared.&quot;);</div><div class="line">    this.target = null;</div><div class="line"></div><div class="line">    target.oilCardRl = null;</div><div class="line">    target.feeChargeRl = null;</div><div class="line">    target.mPiccText = null;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>TypeSpec构建出来的方法只是一个空的方法，方法的实现要依靠MethodSpec，我们看看createBindingConstructor的实现呗<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line">private MethodSpec createBindingConstructor(int sdk, boolean debuggable) &#123;</div><div class="line">    MethodSpec.Builder constructor = MethodSpec.constructorBuilder()</div><div class="line">        .addAnnotation(UI_THREAD)</div><div class="line">        .addModifiers(PUBLIC);</div><div class="line"></div><div class="line">    if (hasMethodBindings()) &#123;</div><div class="line">      constructor.addParameter(targetTypeName, &quot;target&quot;, FINAL);</div><div class="line">    &#125; else &#123;</div><div class="line">      constructor.addParameter(targetTypeName, &quot;target&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (constructorNeedsView()) &#123;</div><div class="line">      constructor.addParameter(VIEW, &quot;source&quot;);</div><div class="line">    &#125; else &#123;</div><div class="line">      constructor.addParameter(CONTEXT, &quot;context&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (hasUnqualifiedResourceBindings()) &#123;</div><div class="line">      // Aapt can change IDs out from underneath us, just suppress since all will work at runtime.</div><div class="line">      constructor.addAnnotation(AnnotationSpec.builder(SuppressWarnings.class)</div><div class="line">          .addMember(&quot;value&quot;, &quot;$S&quot;, &quot;ResourceType&quot;)</div><div class="line">          .build());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (hasOnTouchMethodBindings()) &#123;</div><div class="line">      constructor.addAnnotation(AnnotationSpec.builder(SUPPRESS_LINT)</div><div class="line">          .addMember(&quot;value&quot;, &quot;$S&quot;, &quot;ClickableViewAccessibility&quot;)</div><div class="line">          .build());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (parentBinding != null) &#123;</div><div class="line">      if (parentBinding.constructorNeedsView()) &#123;</div><div class="line">        constructor.addStatement(&quot;super(target, source)&quot;);</div><div class="line">      &#125; else if (constructorNeedsView()) &#123;</div><div class="line">        constructor.addStatement(&quot;super(target, source.getContext())&quot;);</div><div class="line">      &#125; else &#123;</div><div class="line">        constructor.addStatement(&quot;super(target, context)&quot;);</div><div class="line">      &#125;</div><div class="line">      constructor.addCode(&quot;\n&quot;);</div><div class="line">    &#125;</div><div class="line">    if (hasTargetField()) &#123;</div><div class="line">      constructor.addStatement(&quot;this.target = target&quot;);</div><div class="line">      constructor.addCode(&quot;\n&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (hasViewBindings()) &#123;</div><div class="line">      if (hasViewLocal()) &#123;</div><div class="line">        // Local variable in which all views will be temporarily stored.</div><div class="line">        constructor.addStatement(&quot;$T view&quot;, VIEW);</div><div class="line">      &#125;</div><div class="line">      for (ViewBinding binding : viewBindings) &#123;</div><div class="line">        addViewBinding(constructor, binding, debuggable);</div><div class="line">      &#125;</div><div class="line">      for (FieldCollectionViewBinding binding : collectionBindings) &#123;</div><div class="line">        constructor.addStatement(&quot;$L&quot;, binding.render(debuggable));</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      if (!resourceBindings.isEmpty()) &#123;</div><div class="line">        constructor.addCode(&quot;\n&quot;);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (!resourceBindings.isEmpty()) &#123;</div><div class="line">      if (constructorNeedsView()) &#123;</div><div class="line">        constructor.addStatement(&quot;$T context = source.getContext()&quot;, CONTEXT);</div><div class="line">      &#125;</div><div class="line">      if (hasResourceBindingsNeedingResource(sdk)) &#123;</div><div class="line">        constructor.addStatement(&quot;$T res = context.getResources()&quot;, RESOURCES);</div><div class="line">      &#125;</div><div class="line">      for (ResourceBinding binding : resourceBindings) &#123;</div><div class="line">        constructor.addStatement(&quot;$L&quot;, binding.render(sdk));</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return constructor.build();</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到，MethodSpec是XX_ViewBinding中类的方法的具体实现，什么？看不到XX_ViewBindding类里的方法代码的影子？别着急，再看看下面这段就恍然大悟了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">private void addViewBinding(MethodSpec.Builder result, ViewBinding binding, boolean debuggable) &#123;</div><div class="line">    if (binding.isSingleFieldBinding()) &#123;</div><div class="line">      // Optimize the common case where there&apos;s a single binding directly to a field.</div><div class="line">      FieldViewBinding fieldBinding = binding.getFieldBinding();</div><div class="line">      CodeBlock.Builder builder = CodeBlock.builder()</div><div class="line">          .add(&quot;target.$L = &quot;, fieldBinding.getName());</div><div class="line"></div><div class="line">      boolean requiresCast = requiresCast(fieldBinding.getType());</div><div class="line">      if (!debuggable || (!requiresCast &amp;&amp; !fieldBinding.isRequired())) &#123;</div><div class="line">        if (requiresCast) &#123;</div><div class="line">          builder.add(&quot;($T) &quot;, fieldBinding.getType());</div><div class="line">        &#125;</div><div class="line">        builder.add(&quot;source.findViewById($L)&quot;, binding.getId().code);</div><div class="line">      &#125; else &#123;</div><div class="line">        builder.add(&quot;$T.find&quot;, UTILS);</div><div class="line">        builder.add(fieldBinding.isRequired() ? &quot;RequiredView&quot; : &quot;OptionalView&quot;);</div><div class="line">        if (requiresCast) &#123;</div><div class="line">          builder.add(&quot;AsType&quot;);</div><div class="line">        &#125;</div><div class="line">        builder.add(&quot;(source, $L&quot;, binding.getId().code);</div><div class="line">        if (fieldBinding.isRequired() || requiresCast) &#123;</div><div class="line">          builder.add(&quot;, $S&quot;, asHumanDescription(singletonList(fieldBinding)));</div><div class="line">        &#125;</div><div class="line">        if (requiresCast) &#123;</div><div class="line">          builder.add(&quot;, $T.class&quot;, fieldBinding.getRawType());</div><div class="line">        &#125;</div><div class="line">        builder.add(&quot;)&quot;);</div><div class="line">      &#125;</div><div class="line">      result.addStatement(&quot;$L&quot;, builder.build());</div><div class="line">      return;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    List&lt;MemberViewBinding&gt; requiredBindings = binding.getRequiredBindings();</div><div class="line">    if (!debuggable || requiredBindings.isEmpty()) &#123;</div><div class="line">      result.addStatement(&quot;view = source.findViewById($L)&quot;, binding.getId().code);</div><div class="line">    &#125; else if (!binding.isBoundToRoot()) &#123;</div><div class="line">      result.addStatement(&quot;view = $T.findRequiredView(source, $L, $S)&quot;, UTILS,</div><div class="line">          binding.getId().code, asHumanDescription(requiredBindings));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    addFieldBinding(result, binding, debuggable);</div><div class="line">    addMethodBindings(result, binding, debuggable);</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>没错，方法中的所有代码都是通过CodeBlock一句句抠出来的哦……</p>
+<p>到这里，ButterKnife就分析完了，这里还要介绍一下JavaPoet，因为ButterKnife中也是用到了它去生成XX_ViewBinding.java<br>JavaPoet是一组用来生成 .java文件的JAVA API。正如其名，当你创建.java文件时，你将不用再处理代码换行、缩进、引用导入等枯燥而又容易出错的工作，<br>这一切JavaPoet都将能够很好地为你完成，你的工作将变得富有诗意。<br>TypeSpec、ParameterSpec、MethodSpec、CodeBlock、JavaFile都是JavaPoet提供的用于描述一个源文件元素的类</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/12/insert/" rel="next" title="插入排序 & 希尔排序 & 快速排序">
+                <i class="fa fa-chevron-left"></i> 插入排序 & 希尔排序 & 快速排序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">EdisonLiao</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Java注解"><span class="nav-number">1.</span> <span class="nav-text">关于Java注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#举个栗子"><span class="nav-number">2.</span> <span class="nav-text">举个栗子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ButterKnife的实现"><span class="nav-number">3.</span> <span class="nav-text">ButterKnife的实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EdisonLiao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

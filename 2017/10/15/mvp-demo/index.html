@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="写了个简单的 MVP+Rxjava+Retrofit Demo">
+<meta property="og:url" content="http://yoursite.com/2017/10/15/mvp-demo/index.html">
+<meta property="og:site_name" content="行到水穷处，坐看云起时">
+<meta property="og:description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/10/15/mvp-demo/struct.jpg">
+<meta property="og:updated_time" content="2017-10-15T07:54:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="写了个简单的 MVP+Rxjava+Retrofit Demo">
+<meta name="twitter:description" content="要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。">
+<meta name="twitter:image" content="http://yoursite.com/2017/10/15/mvp-demo/struct.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/15/mvp-demo/"/>
+
+
+
+
+
+  <title>写了个简单的 MVP+Rxjava+Retrofit Demo | 行到水穷处，坐看云起时</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">行到水穷处，坐看云起时</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/15/mvp-demo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="EdisonLiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="行到水穷处，坐看云起时">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">写了个简单的 MVP+Rxjava+Retrofit Demo</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-15T15:54:02+08:00">
+                2017-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>要说当下android开发最热门的框架非MVP+Rxjava+Retrofit组合莫属，关于这三种框架的组合网上也有很多资料介绍，于是乎自己也写了个小Demo来练练手。</p>
+<a id="more"></a>
+<p>本文主要是对MVP模式进行简单的介绍，Rxjava跟Retrofit只是Api player……. <a href="https://github.com/EdisonLiao/MVPDemo" target="_blank" rel="external">demo地址</a></p>
+<h3 id="why-MVP"><a href="#why-MVP" class="headerlink" title="why MVP?"></a>why MVP?</h3><p>用过MVC来开发项目的同学都应该有这样一种感觉，就是Activity 或者 Fragment既是View层又是Controller层，使得 Activity或者Frament的代码量非常大，<br>，代码耦合度也很高，显得臃肿。而MVP则把Activity和Fragment解救了出来，同时也达到了解耦合的效果，但与此同时代码量也增加不少。</p>
+<h3 id="MVP的分工"><a href="#MVP的分工" class="headerlink" title="MVP的分工"></a>MVP的分工</h3><p>Model层负责数据的组织，如SQLite操作、网络请求等，更多的是存放实体类，持有Presenter引用；<br>View层负责界面的展示，具体的业务逻辑交由Presenter层处理，持有Presenterr引用；<br>Presenter层则是关键，是Model和View之间的沟通桥梁，同时持有Model和View的对象实例，处理业务逻辑；</p>
+<p>先看看整个Demo的结构（项目是用AndroidStudio 3.0（预览版）搭的）：</p>
+<p><img src="/2017/10/15/mvp-demo/struct.jpg" alt="demo结构图"></p>
+<p>下面逐一来看看MVP三层的实现代码</p>
+<h3 id="Model层"><a href="#Model层" class="headerlink" title="Model层"></a>Model层</h3><p>MainModelResponse是网络请求返回的json实体类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public class MainModelResponse &#123;</div><div class="line"></div><div class="line">	@SerializedName(&quot;error&quot;)</div><div class="line">	private boolean error;</div><div class="line"></div><div class="line">	@SerializedName(&quot;results&quot;)</div><div class="line">	private List&lt;ResultsItem&gt; results;</div><div class="line"></div><div class="line">	public void setError(boolean error)&#123;</div><div class="line">		this.error = error;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public boolean isError()&#123;</div><div class="line">		return error;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setResults(List&lt;ResultsItem&gt; results)&#123;</div><div class="line">		this.results = results;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public List&lt;ResultsItem&gt; getResults()&#123;</div><div class="line">		return results;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>本demo中的Model层没有包含网络请求，具体的网络请求在retrofit目录下实现，这里待会再做分析</p>
+<h3 id="View层"><a href="#View层" class="headerlink" title="View层"></a>View层</h3><p>BaseView接口定义了所有的Activity都可能会用到的公共方法，比如本例中的showLoading 和 hideLoading<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public interface BaseView &#123;</div><div class="line">    void showLoading();</div><div class="line"></div><div class="line">    void hideLoading();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>MainView接口继承了BaseView接口，对应了MainActivity，定义了MainActivity需要用到的展示界面的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public interface MainView extends BaseView &#123;</div><div class="line"></div><div class="line">    void getMainModelData(MainModelResponse data);</div><div class="line">    void getErrorMsg(String msg);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>MainActivity也是属于View层，由于其实现了与Presenter之间的绑定，因此待会再分析</p>
+<h3 id="网络请求"><a href="#网络请求" class="headerlink" title="网络请求"></a>网络请求</h3><p>ApiStores接口，Retrofit把http/https请求改由接口的方式去定义，请求的URL及参数都在接口中完成定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public interface ApiStores &#123;</div><div class="line">    //base URL</div><div class="line">    String BASE_URL = &quot;http://gank.io/api/data/&quot;;</div><div class="line"></div><div class="line">    //RxjavaRetrofit</div><div class="line">    @GET(&quot;&#123;osType&#125;/&#123;month&#125;/&#123;day&#125;&quot;)</div><div class="line">    Observable&lt;MainModelResponse&gt; loadDataByRetrofitRxjava(@Path(&quot;osType&quot;)String osType,</div><div class="line">                                                           @Path(&quot;month&quot;)String month,</div><div class="line">                                                           @Path(&quot;day&quot;)String day);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到，BASE_URL是请求的基本路径，而osType、month、day则是可配置的请求参数，ApiStores接口方法返回一个MainModelResponse类型的Observable</p>
+<p>ApiClient相当于一个的工具类，返回一个Retrofit对象，实现网络请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public class ApiClient &#123;</div><div class="line">    public static Retrofit mRetrofit;</div><div class="line"></div><div class="line">    public static Retrofit retrofit()&#123;</div><div class="line">        if (mRetrofit == null)&#123;</div><div class="line">            OkHttpClient.Builder builder = new OkHttpClient.Builder();</div><div class="line"></div><div class="line">            OkHttpClient client = builder.build();</div><div class="line">            mRetrofit = new Retrofit.Builder()</div><div class="line">                    .baseUrl(ApiStores.BASE_URL)</div><div class="line">                    .addConverterFactory(GsonConverterFactory.create())</div><div class="line">                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())</div><div class="line">                    .client(client)</div><div class="line">                    .build();</div><div class="line"></div><div class="line">        &#125;</div><div class="line">        return mRetrofit;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>ApiCallBack继承Subscriber，处理请求返回的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">public abstract class ApiCallBack&lt;M&gt; extends Subscriber&lt;M&gt; &#123;</div><div class="line">    public abstract void onSuccess(M model);</div><div class="line"></div><div class="line">    public abstract void onFailure(String msg);</div><div class="line"></div><div class="line">    public abstract void onFinish();</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onCompleted() &#123;</div><div class="line">        onFinish();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onError(Throwable e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">        if (e instanceof HttpException) &#123;</div><div class="line">            HttpException httpException = (HttpException) e;</div><div class="line">            //httpException.response().errorBody().string()</div><div class="line">            int code = httpException.code();</div><div class="line">            String msg = httpException.getMessage();</div><div class="line">            if (code == 504) &#123;</div><div class="line">                msg = &quot;网络不给力&quot;;</div><div class="line">            &#125;</div><div class="line">            if (code == 502 || code == 404) &#123;</div><div class="line">                msg = &quot;服务器异常，请稍后再试&quot;;</div><div class="line">            &#125;</div><div class="line">            onFailure(msg);</div><div class="line">        &#125; else &#123;</div><div class="line">            onFailure(e.getMessage());</div><div class="line">        &#125;</div><div class="line">        onFinish();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onNext(M m) &#123;</div><div class="line">        onSuccess(m);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="Presenter层"><a href="#Presenter层" class="headerlink" title="Presenter层"></a>Presenter层</h3><p>BasePresenter是Presenter基类，实现对View的绑定，解决Presenter无法感知Activity生命周期导致的内存泄漏，本例中只是简单地将View的强引用进行绑定和解绑<br>最好的处理方法是将View声明为 WeakReferences，这样的话，当内存不足时View对象会得到释放。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">public class BasePresenter&lt;V&gt; &#123;</div><div class="line">    public V mView;</div><div class="line">    protected ApiStores mApiStores;</div><div class="line">    private CompositeSubscription mComposite;</div><div class="line"></div><div class="line">    public void attachView(V mView)&#123;</div><div class="line">        this.mView = mView;</div><div class="line">        mApiStores = ApiClient.retrofit().create(ApiStores.class);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void detachView()&#123;</div><div class="line">        this.mView = null;</div><div class="line">        onUnsubscribe();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //Rxjava取消注册，避免内存泄露</div><div class="line">    public void onUnsubscribe()&#123;</div><div class="line">        if (mComposite != null &amp;&amp; mComposite.hasSubscriptions())&#123;</div><div class="line">            mComposite.unsubscribe();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //发起网络请求</div><div class="line">    public void addSubscription(Observable observable, Subscriber subscriber)&#123;</div><div class="line">        if (mComposite == null)&#123;</div><div class="line">            mComposite = new CompositeSubscription();</div><div class="line">        &#125;</div><div class="line">        mComposite.add(observable</div><div class="line">            .subscribeOn(Schedulers.io())</div><div class="line">            .observeOn(AndroidSchedulers.mainThread())</div><div class="line">            .subscribe(subscriber));</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>MainPresenter基础BasePresenter，对应于MainActivity，负责处理MainActivity的业务逻辑，本例中的start方法，是模仿平常时我们在Activity的onCreate中发起网络请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public class MainPresenter extends BasePresenter&lt;MainView&gt; &#123;</div><div class="line"></div><div class="line">    public MainPresenter(MainView view)&#123;</div><div class="line">        attachView(view);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void start(String osType,String month,String day)&#123;</div><div class="line">        mView.showLoading();</div><div class="line">        addSubscription(mApiStores.loadDataByRetrofitRxjava(osType, month, day),</div><div class="line">                new ApiCallBack&lt;MainModelResponse&gt;() &#123;</div><div class="line">                    @Override</div><div class="line">                    public void onSuccess(MainModelResponse model) &#123;</div><div class="line">                        mView.getMainModelData(model);</div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    @Override</div><div class="line">                    public void onFailure(String msg) &#123;</div><div class="line">                        mView.getErrorMsg(msg);</div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    @Override</div><div class="line">                    public void onFinish() &#123;</div><div class="line">                        mView.hideLoading();</div><div class="line">                    &#125;</div><div class="line">                &#125;);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>好了，终于到了MainActivity了，MainActivity实现了MainView接口中所有的界面相关的方法，具体代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">public class MainActivity extends AppCompatActivity implements MainView&#123;</div><div class="line"></div><div class="line">    RecyclerView mRecyclerView;</div><div class="line">    private ProgressDialog mProgressdialog;</div><div class="line">    private MainPresenter mainPresenter;</div><div class="line">    private MainAdapter mAdpter;</div><div class="line">    private List&lt;ResultsItem&gt; mList;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_main);</div><div class="line">        mainPresenter = new MainPresenter(this);</div><div class="line">        mainPresenter.start(&quot;Android&quot;,&quot;10&quot;,&quot;1&quot;);</div><div class="line">        mRecyclerView = (RecyclerView)findViewById(R.id.recycler_view);</div><div class="line">        initRecyclerView();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private void initRecyclerView()&#123;</div><div class="line">        mList = new ArrayList&lt;&gt;();</div><div class="line">        mAdpter = new MainAdapter(mList,this);</div><div class="line">        GridLayoutManager manager = new GridLayoutManager(this,2);</div><div class="line">        mRecyclerView.setLayoutManager(manager);</div><div class="line">        mRecyclerView.setAdapter(mAdpter);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void showLoading() &#123;</div><div class="line">        mProgressdialog = new ProgressDialog(MainActivity.this);</div><div class="line">        mProgressdialog.setMessage(&quot;加载中&quot;);</div><div class="line">        mProgressdialog.show();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void hideLoading() &#123;</div><div class="line">        if (mProgressdialog != null &amp;&amp; mProgressdialog.isShowing()) &#123;</div><div class="line">            // progressDialog.hide();会导致android.view.WindowLeaked</div><div class="line">            mProgressdialog.dismiss();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void getMainModelData(MainModelResponse data) &#123;</div><div class="line">        Log.e(&quot;data&quot;,data.getResults().size()+&quot;&quot;);</div><div class="line">        mAdpter.update(data.getResults());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void getErrorMsg(String msg) &#123;</div><div class="line">        Log.e(&quot;error&quot;,msg);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onDestroy() &#123;</div><div class="line">        super.onDestroy();</div><div class="line">        mainPresenter.detachView();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在onCreate中实例化一个MainPresenter对象，从而实现了View与Presenter之间的绑定</p>
+<p>本demo主要是记录自己对于 MVP+Rxjava+Retrofit简单整合的学习。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/24/OldBlogLink/" rel="next" title="从前写的文章">
+                <i class="fa fa-chevron-left"></i> 从前写的文章
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/04/KMP/" rel="prev" title="KMP算法">
+                KMP算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">EdisonLiao</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#why-MVP"><span class="nav-number">1.</span> <span class="nav-text">why MVP?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVP的分工"><span class="nav-number">2.</span> <span class="nav-text">MVP的分工</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model层"><span class="nav-number">3.</span> <span class="nav-text">Model层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View层"><span class="nav-number">4.</span> <span class="nav-text">View层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络请求"><span class="nav-number">5.</span> <span class="nav-text">网络请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Presenter层"><span class="nav-number">6.</span> <span class="nav-text">Presenter层</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EdisonLiao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
